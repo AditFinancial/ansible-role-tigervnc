@@ -1,0 +1,10 @@
+---
+- name: Test play
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    tigervnc_user: vagrant
+    tigervnc_vncpass: test1
+  roles:
+    - role: ansible-role-tigervnc

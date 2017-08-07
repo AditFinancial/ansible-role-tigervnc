@@ -1,0 +1,70 @@
+---
+
+- name: Install the 'Server with GUI' environment group (takes a while).
+  yum:
+    name: "@^Server with GUI"
+    state: present
+  async: 1200
+  poll: 60
+
+- name: Install TigerVNC server.
+  yum:
+    name: tigervnc-server
+    state: present
+
+- name: Ensure TigerVNC unit file is available.
+  template:
+    src: vncserver@.service.j2
+    dest: /etc/systemd/system/vncserver@:1.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart tigervnc
+    - daemon-reload
+
+- name: "Create the remote {{ tigervnc_user_home }}/.vnc directory"
+  file:
+    path: "{{ tigervnc_user_home }}/.vnc"
+    owner: "{{ tigervnc_user }}"
+    group: "{{ tigervnc_user }}"
+    mode: 0755
+    state: directory
+  notify:
+    - restart tigervnc
+
+- name: "Set vnc password for user {{ tigervnc_user }}."
+  shell: |
+    echo {{ tigervnc_vncpass }} | vncpasswd -f > {{ tigervnc_user_home }}/.vnc/passwd
+  args:
+    executable: /bin/bash
+  notify:
+    - restart tigervnc
+
+- name: "Change permissions to 600 for {{ tigervnc_user_home }}/.vnc/passwd"
+  file:
+    path: "{{ tigervnc_user_home }}/.vnc/passwd"
+    owner: "{{ tigervnc_user }}"
+    group: "{{ tigervnc_user }}"
+    mode: 0600
+  notify:
+    - restart tigervnc
+
+# ansible 2.2 and above
+# - name: Enable TigerVNC server.
+#   systemd:
+#     name: vncserver@:1.service
+#     enabled: yes
+
+- name: Enable TigerVNC server.
+  service:
+    name: vncserver@:1.service
+    enabled: yes
+
+- name: Add vnc-server in the firewall.
+  firewalld:
+    service: vnc-server
+    permanent: true
+    state: enabled
+  notify:
+    - firewall-cmd--reload

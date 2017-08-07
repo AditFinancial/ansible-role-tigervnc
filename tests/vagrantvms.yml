@@ -1,0 +1,9 @@
+# How it works:
+# See http://blog.scottlowe.org/2014/10/22/multi-machine-vagrant-with-yaml/ for details.
+
+- name: centos7test-gui
+  box:  pbarriscale/centos7-gui
+  mem:  2048
+  cpus: 2
+  ip:   192.168.44.10
+

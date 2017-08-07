@@ -1,0 +1,24 @@
+---
+# ansible 2.2 and above
+# - name: restart tigervnc
+#   systemd:
+#     state: restarted
+#     daemon_reload: yes
+#     name: vncserver@:1
+- name: restart tigervnc
+  service:
+    state: restarted
+    name: vncserver@:1
+
+- name: daemon-reload
+  command: |
+    systemctl daemon-reload
+
+
+- name: firewall-cmd--reload
+  command: |
+    firewall-cmd --reload
+
+
+
+

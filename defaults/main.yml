@@ -1,0 +1,4 @@
+---
+tigervnc_user:
+tigervnc_vncpass:
+tigervnc_user_home: "/home/{{ tigervnc_user }}"
