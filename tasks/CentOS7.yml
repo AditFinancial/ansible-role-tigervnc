@@ -21,7 +21,8 @@
     mode: 0644
   notify:
     - restart tigervnc
-    - daemon-reload
+
+# TODO: Add some check for user existance
 
 - name: "Create the remote {{ tigervnc_user_home }}/.vnc directory"
   file:
