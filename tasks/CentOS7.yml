@@ -4,8 +4,6 @@
   yum:
     name: "@^Server with GUI"
     state: present
-  async: 1200
-  poll: 60
 
 - name: Install TigerVNC server.
   yum:
