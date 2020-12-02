@@ -3,12 +3,11 @@ Description=Remote desktop service (VNC)
 After=syslog.target network.target
 
 [Service]
-Type=forking
-User={{ tigervnc_user }}
+Type=simple
+
 # Clean any existing files in /tmp/.X11-unix environment
 ExecStartPre=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
-ExecStart=/usr/sbin/runuser -l {{ tigervnc_user }} -c "/usr/bin/vncserver %i"
-PIDFile=/home/{{ tigervnc_user }}/.vnc/%H%i.pid
+ExecStart=/usr/bin/vncserver_wrapper {{tigervnc_user}} %i
 ExecStop=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
 
 [Install]
