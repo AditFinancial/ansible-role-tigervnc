@@ -59,11 +59,3 @@
   service:
     name: vncserver@:1.service
     enabled: yes
-
-- name: Add vnc-server in the firewall.
-  firewalld:
-    service: vnc-server
-    permanent: true
-    state: enabled
-  notify:
-    - firewall-cmd--reload
